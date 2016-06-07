@@ -1,3 +1,7 @@
 Adding some code here!
 Addding more code
+<<<<<<< HEAD
 Adding yet more code
+=======
+Fix1
+>>>>>>> fb92642... added fix1

@@ -183,7 +183,7 @@ origin push-url(push)
 Git Protocols -
 
 Protocol		            Port			            Example									              Notes
-http(s)			    80/443	    https://github.com/jquery/jquery.git	  Read-write, Password for auth, Firewall friendly
+http(s)			        80/443	    https://github.com/jquery/jquery.git	  Read-write, Password for auth, Firewall friendly
 git		                    9418	    git://github.com/jquery/jquery.git		  Read-only, Anonymous only(Not firewall friendly)
 ssh		                    22		    git@github.com:jquery/jquery.git		  Read-write, SSH keys for auth
 file	                            n/a		    /Users/James/code/jquery			  Read-write, Local only

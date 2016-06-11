@@ -1,0 +1,397 @@
+$ git --version 
+// prints git version
+
+$ git init 
+//Initialises/creates git repository in a folder
+
+
+Installing git on OSX -
+$ brew install git
+or Download DMG ( http://git-scm.com/download/mac)
+
+
+Installing git on Linux -
+$ sudo apt-get install git-core (Debian/Ubuntu distros)
+$ sudo yum install git-core (Fedora distros)
+For other distros, check your package manager
+
+Configuring Git -
+
+System-level configuration--
+git config --system
+Stored in /etc/gitconfig or c:\Program Files (x86)\Git\etc\gitconfig
+
+User-level configuration--
+git config --global
+Stored in ~/.gitconfig or c:\Users\<NAME>\.gitconfig
+
+Repository-level configuration--
+git config
+Stored in .git/config in each repo
+
+
+Configuration Commands -
+$ git config --global --list 
+//list of all the global configuations
+
+$ git config --global user.name "Soaurabh Kakkar"
+$ git config --global user.email "Sk@gmail.com"
+$ git config --global core.editor vim
+
+$ git config --global help.autocorrect 1
+//Autocorrects your commands after a delay of 0.1 seconds, if set to zero no-autocorrecting(default)
+
+$ git config --global color.ui auto
+//colourises the output when required
+
+$ git config --global core.autocrlf input
+//Use input on OSX or Linux
+//Use true on Windows
+
+$ git config user.name "John Fedric" //Repo-level setting
+$ git config --list //Repo-level listing of config.
+
+//These configs are heirarchical, user-level settings overrides system level settings and repo-level overrides user-level settings
+
+$ git config --unser user.name //To remove the particular setting or edit the resp. file using (vim file_path)
+
+
+
+Working Locally With Git -
+
+$ git init
+// Turns a directory into local git repositary, creates .git directory  which contains the repo. and all of its metadata
+
+$ git status
+// To check status of the git repo. i.e. how many working-files, staged-files are there for commiting
+
+$ git add <File_Name1> <File_Name2> and so on...
+// Adds a file to the staging area of git repo.
+
+$ git add -A
+// Adds all the files in the staging area of git repo.
+
+$ git add -u
+// Adds all modified/updated files in the staging area of git repo.(Note - New files will not get staged by this command)
+
+$ git commit 
+//Brings up the default text editor(in my case vim), enter your commit msg and save the changes to commit to the repo.
+
+$ git commit -m <"Msg">
+//Provides the commit msg inline
+
+$ git commit -am <"Msg">
+// Does both adds, msg and commit
+
+$ git log
+// History of commits made to the repo.
+// git idenfies commits using the commit SHA1 of the commits, often you use first 5-8 chars of the commit SHA1 to uniquely dealing with commits
+
+$ git diff dd6819..a15ec6
+//Difference b/w commits having first 6-chars of SHA1 hash dd6819 and a15ec6 resp. 
+
+$ git diff HEAD~1..HEAD
+//Latest commit is known as the HEAD
+//This the difference b/w latest commit and one commit back from the HEAD
+
+$ git diff HEAD~1..
+// Same as git diff HEAD~1..HEAD
+
+Note - 
+1. To see contents of a file use, $ cat <File_Name>
+2. To Edit any file use, $ vim <File_Name>
+3. To create a file use, $ touch <File_Name>
+4. To create/append_text a/in file you can also use, $ echo "File content to be added" >> File_Name
+5. To create a directory use, $ mkdir <Dir_Name>
+6. To rename file, $ mv <File_Name> <New_File_Name>
+7. To Delete file, $ rm <File_Name>
+8. To Remove dir, $ rmdir <Dir_Name>
+9. To list contents of dir, $ ls -latr
+
+$ git checkout <File_Name1> <File_Name2> and so on...
+// Removes/Revert changes from the working copy of the repo.
+
+$ git reset --hard 
+// Resets/Revert all the changes from the working-copy as well as staging-area of the repo.
+
+$ git reset --soft HEAD~1
+// Moves the current HEAD/committed changes to staging-area of the repo. and resets the HEAD to a previous HEAD/commit.
+
+$ git reset --hard HEAD~1
+// Removes/Discard the changes in the current HEAD/Commit and resets the HEAD to a previous HEAD/commit.
+
+$ git clean -f <File_Name1> <File_Name2> and so on...
+//clean the files from the working copy of the repo, it actually deletes the files from the file-system
+
+$ git clean -n 
+//prints what will get cleaned from the working copy of the repo.
+
+$ git clean -f 
+//clean all the files from the working copy of the repo, it actually deletes the files from the file-system
+
+.gitignore file
+//Ignores files which you don't want to get committed to the repo.
+// should be placed parallel to .git directory
+// this file does get committed to the repo.
+log/ 
+//ignores any logs directory buried anywhere deep in my application
+
+/logs
+//ignores logs directory relative to the root of the repo.
+
+/logs/*.txt
+//ignores only the txt files in the logs directory relative to the root of the repo.
+
+Here is a useful collection of .gitignore files - 
+https://github.com/github/gitignore/
+https://gist.github.com/octocat/9257657
+
+Working Remotely With Git -
+
+$ git clone https://github.com/url/url.git
+//This will download all the commits that have ever been made to the repo. or you can say, creates a replica/clone of the repo. in the local
+
+$ git log --oneline
+// show commit history per line i.e. one-line for each commit
+
+$ git log --oneline | wc -l
+//Number of commits made to this repo.
+
+$ git log --oneline --graph
+//shows graph on the left hand side which shows branches and merges for the entire repo.
+
+$ git log --format=short
+// shows short summary of history per commit
+
+$ git shortlog
+// shows list of commits made by each individual and their commit messages in alphabetical order
+
+$ git shortlog -sne
+// Summary, Number of commits, email-id of the resp. individual i.e to check who is majorly contributing to the repo.
+
+$ git show HEAD     or     $ git show <SHA1>
+// To look at a particular commit
+
+$ git remote
+//outputs 'origin' which is a default name for Where the source has came from
+
+$ git remote -v
+// with verbose it outputs
+origin fetch-url(fetch)
+origin push-url(push)
+
+Git Protocols -
+
+Protocol			Port			Example									Notes
+http(s)				80/443	https://github.com/jquery/jquery.git	Read-write, Password for auth, Firewall friendly
+git					9418	git://github.com/jquery/jquery.git		Read-only, Anonymous only(Not firewall friendly)
+ssh					22		git@github.com:jquery/jquery.git		Read-write, SSH keys for auth
+file				n/a		/Users/James/code/jquery				Read-write, Local only
+
+
+$ git branch 
+//lists the local branches
+
+$ git branch -r 
+//lists the remote branches
+
+$ git tag
+// Tags are Stable point, that are known points in your code-base i.e to Tag a particular release version.
+// This command displays all the tags in the repo.
+
+$ git remote add origin <repo-url>
+// Adds a remote destination to the local repo.
+
+$ git remote rm origin
+//To remove the origin
+
+$ git fetch <remote-name>
+// fetches changes from a particular <remote-name>, generally 'origin'
+
+$ git fetch
+//fetches changes from all the remote repos.
+
+$ git log origin/master 
+// List commits in Remote branch name i.e. 'origin/master'
+
+$ git merge origin/master
+//Merge from origin/master to your local branch 'master'
+
+$ git branch --set-upstream master origin/master
+// To set the upstream-branch, the upstream tracking branch is basically what branch remotely does my local branch mirror
+// To set the correspondance b/w the local and remote branch, single time operation
+// Here 'master' is local branch name and 'origin/master' is remote branch name
+
+$ git pull
+// If upstream is set then it will fetch and merge changes
+
+$ git pull <remote-name> <remote-branch>
+// if you don't want to specify remote tracking branch i.e. git pull origin master
+
+$ git push
+//push changes to remote repo.
+
+$ git push <remote-name> <remote-branch>
+// if you don't want to specify remote tracking branch i.e. git push origin master
+
+$ git tag <tag-name>
+//creates a tag, stable point which points to a particular SHA1-hash/commit
+
+$ git tag -am <tag-name> <"Msg">
+//creates a tag with message
+
+$ git tag -s <tag-name>
+//Signed tag, requires a msg. and passphrase to unlock my signing key
+
+$ git tag -v <tag-name>
+//Verifies signature of the tag
+
+$ git push --tags 
+//To push all the tags to the remote-repo.
+
+
+Branching, Merging And Rebasing With Git -
+
+$ git log --graph --oneline --all --decorate
+// shows graphical representation of all the branches with appropriate tags, labels likes HEAD, local-branch, remote-branch etc.
+
+$ git config --global alias.lga "log --graph --oneline --all --decorate"
+// setting alias in the users-git-config setting
+// Now use $ git lga for this.
+
+$ git branch <Branch_Name>
+// creates a new branch from HEAD with name Branch_Name
+
+$ git checkout <Branch_Name>
+// To switch to branch named Branch_Name
+
+Note -
+1. Branches are simply labels on the SHA1 hashes of the individual commits
+2. Branches will follow the commits, as you add additional commits on the branch, the branch will move along.
+3. Tag will always stay on the same commit, just friendly name for SHA1
+
+$ git branch <Branch_Name> <SHA1-Hash>
+// creates a branch from the given SHA1-Hash
+
+$ git branch <Branch_Name> <Tag-Name>
+// creates a branch from the given Tag-Name
+
+$ git branch -m <Branch_Name> <New_Branch_Name>
+// to rename a particular branch
+
+$ git branch -d <Branch_Name>
+// to delete a particular branch
+
+$ git branch -D <Branch_Name>
+// To force delete a particular branch
+
+$ git checkout -b <Branch_Name>
+// Creates a branch and then switch to that branch
+
+$ git reflog
+// This gives a log of all the references where HEAD has pointed
+// git will keep these dangling commits for 30-days
+
+$ git branch <Branch_Name> <Commit_SHA1-Hash>
+// This will recover the deleted commit corresponding to the Branch_Name and SHA1-Hash
+
+$ git stash
+// Saves your pending changes in your working copy in the stash-area of git repo. and clears changes from working-copy
+// Holding area for your pending changes
+// After stashing changes you can switch branches
+
+$ git stash list
+// List of stashed changes
+
+$ git stash apply
+// To pull those changes back from Stash and applying it, so that changes will gets applied in working-copy
+// Stash will still remain in the list in this case
+
+$ git stash pop
+// Pops the item from the top of the stash-list and apply it to your working-copy
+
+$ git stash drop
+// To drop/delete a stash from the top of the stash-list
+
+$ git stash branch <Branch_Name>
+// Creates that new branch, checkout the branch and apply the stash to that branch
+
+$ git merge <Branch_Name>
+//merge is always done on 'master' branch
+
+$ git merge <SHA1-Hash>
+//merges a particular commit to the master branch
+
+$ git mergetool
+// To resolve merging conflicts
+
+$ git diff --cached
+//Compare the repo. HEAD with the staging area
+
+$ git rebase <Branch-Name>
+// Rebase/Merge changes from Branch-Name to the Current-Branch
+// Changes will be off one w.r.t Branch-Name
+
+$ git rebase --continue
+// To continue the rebase operation, we need to continue the rebase operation after resolving any conflict during rebase
+
+$ git cherry-pick <SHA1-Hash>
+// picks a particular commit and applies it to the current working branch, it's not a merge/rebase as that commit is now available in both the branches.
+// it's just picking a commit and applying it to a current/particular branch
+
+$ git push origin <Name_of_local_branch>
+//pushes a branch to the remote with the same name as local's branch name
+
+$ git push origin <Name_of_local_branch> : <Name_of_remote_branch_corres_to_this_local_branch>
+// pushes a branch to the remote with the same/diff name
+
+$ git push origin  : <Name_of_remote_branch_corres_to_this_local_branch>
+//deletes the remote branch with the name <Name_of_remote_branch_corres_to_this_local_branch>
+Thanks!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+

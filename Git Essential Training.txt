@@ -1,0 +1,549 @@
+Version Control History
+
+Source Code Control System (SCCS)
+- 1972(AT & T), closed source, free with Unix
+SCCS keeps the original document, but instead saving the whole document second time, it saves a snapshot of only the changes applied.
+So in SCCS, version-5 of the document can be retrieved by taking version-1 and applying 4 sets of changes to it.
+
+Revision Control System (RCS)
+- 1982, open source
+It was cross-platform, whereas SCCS was Unix only
+Faster, Because RCS kept the most recent file in its whole form and if you wanted previous versions, then you applied the change snapshots to go backwards in time.
+
+Concurrent Versions System (CVS)
+- 1986-1990, open source
+More than one developer can work concurrently on the same file on remote-repo.
+
+Apache Subversion (SVN)
+- 2000, open source
+Faster than CVS, and allowed saving of non-text files, like images
+It watches the directory as a whole and actually takes snapshot of the directory not just the files
+In CVS you talk about revision-7 of some file whereas in SVN you talk about some file as it appears in revision-7
+CVS has problems you rename a file, but it's not the case with SVN
+CVS only looks at collection of individually named files. CVS would also update files one at a time as it went to either apply or read back changes.
+SVN does transactional commit and apply all of the changes that happen to a directory or none of them at all.
+
+Bitkeeper SCM
+- 2000, closed source, proprietary
+- distributed version control
+- "community version" was free
+- used for source code of the linux kernal from 2002-2005
+- April 2005 : the "community version" not free anymore
+
+
+Git is born
+- April 2005
+- Created by Linus Torvalds
+- replacement for Bitkeeper to manage Linux kernal source code
+- Distributed Version System
+- Open Source and Free
+- Faster than other SCM
+- better safeguards against data corruption
+- GitHub launched in 2008 to host Git repositories and became a hit
+
+
+Git is Distributed Version Control
+- different users --or teams of users--each maintain their own repositories instead of working from a central repository. 
+
+changes are stored as change sets or patches
+- focused on tracking changes not the versions of the document.
+- different from CVS and SVN, which track versions
+- changesets can be exchanged b/w repos.
+  - Merge in changesets or apply patches
+
+So there is no single master repository, there is just 
+many working copies each with their own combination of change sets. 
+  
+Now that's a subtle difference, you may think, well, CVS and SVN those track changes too, they don't. 
+They track the changes that it takes to Get from version-to-version of each of the different files or the different states of a 
+directory. Git doesn't work that way, Git really focuses on these change sets in encapsulating a change set as a discrete unit 
+and then those change sets can be exchanged between repositories. We're not trying to keep up-to-date with the latest version of 
+something instead the question is, do we have a change set applied or not? 
+
+$ which git
+// gives the path of git where it is installed
+
+Git Official Website- 
+http://git-scm.com
+http://git-scm.com/download/mac
+http://git-scm.com/download/linux
+
+GitHub instructions (with Screenshots)
+https://help.github.com/articles/set-up-git
+
+To set up autocompletion in git
+https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+Add it in the ~/.bash_profile --
+if [ -f ~/.git-completion.bash ]; then
+	source ~/.git-completion.bash
+fi
+
+
+$ git help 
+//Shows diff git commands and their oneline description
+
+$ git help <command-name>
+//Shows complete description about a particular command
+// you can move pages forward and backward by using 'f'/press-enter/space-bar and 'b' resp.
+// to exit/esc press 'q'
+
+$ man git-<command-name>
+// Shows complete description about a particular command, same as above.
+
+$ git add .        
+// Add all the changes of the current project directory to the staging area i.e. same as $ git add -A
+
+$ git log -n <Number>
+//Shows only most recent <Number> of commits 
+
+$ git log --since=2016-06-15
+//Commits since date
+
+$ git log --until=2016-06-15
+//Commits until date
+
+$ git log --author="<Author_Name>"
+//All commits from author
+
+$ git log --grep="<Search-Text>"
+//Lists all commit messages having Search-Text
+
+Note - Git Works on snapshot of changes that were made i.e. changesets and has nothing to do with files or versions of files.
+HEAD always points to the tip of the currently checked out branch from the repository
+
+$ git log <commit-SHA1>
+//shows all the logs/history before commit-SHA1
+
+$ git reset HEAD <file>... 
+//To unstage changes, i.e. to move changes from staging-area to working copy
+
+$ git diff
+// shows diff in staging-index and in working-copy
+
+$ git diff <file-name>
+// show diff in file in staging-index and in working-copy
+
+$ git diff --staged
+//show diff in repo. and in staging-index/area. Same as $ git diff --cached
+
+$ git rm <file_to_delete>
+// removes the file from the file-system and adds the file to the staging area for commit.
+
+$ git mv <file_name> <new_file_name>
+//changes the file-name(rename/move) in the file-system and adds the changes to the staging area for commit.
+
+//  Toggle fold long line 
+minus sign(-) + shift + s + return
+
+$ git diff --color-words <file_name>
+//shows diff by highlighting difference in the words of the line.
+
+Note - checkout does is go to the repository, get the named thing that I've gave you, and make my working directory
+look like that.  So if that named thing is a branch, it brings the branch down. If that named thing is the file, 
+it brings the file down.
+
+$ git checkout -- <file_name>
+// get the file down from the repo. without changing the branch.
+ 
+$ git commit --amend -m "Msg"
+// Used to amend the HEAD commit in the repo, may be a msg-change or more modifications in files of the repo.
+
+$ git checkout <SHA1-Hash> -- <file_name>
+// get the file down from the repo. in the staging-area corresponding to the commit SHA1-Hash without changing the branch.
+
+$ git revert <SHA1-Hash>
+// Reverts a commit in the repo. and does a new commit for that revert.
+
+$ git revert -n <SHA1-Hash>
+// Reverts a commit in the repo. and stage changes for the commit to revert.
+
+//Using reset to undo multiple commits
+
+git reset - it allows us to specify where the HEAD pointer should point to, i.e. it moves the HEAD pointer.
+--soft 
+  // just moves the HEAD pointer to the specified commit
+ //does not change staging index or working copy
+ 
+--mixed(default)
+ //moves the HEAD pointer to the specified commit
+ //changes staging index to match repository
+ //does not changes working directory/area
+ 
+--hard ( use this with caution)
+//moves the HEAD pointer to the specified commit
+//changes staging index and working directory to match repository
+
+$ git reset --soft <SHA1-Hash>
+// resets the HEAD to the given SHA1-Hash commit
+
+$ git reset --mixed <SHA1-Hash>
+// resets the HEAD to the given SHA1-Hash commit and also changes staging-index to match repository.
+
+$ git reset --hard <SHA1-Hash>
+ // resets the HEAD to the given SHA1-Hash commit and also changes staging index and working directory to match repository.
+ 
+ $ git clean - f
+ // It has one simple purpose, which is just to throw away the untracked files. i.e from working directory.
+ 
+ Note - .gitignore file can use basic regex like * ? [aeiou] [0-9]
+ // negative expressions with ! 
+ //ignore all php files except index.php
+ *.php
+ !index.php
+ 
+//comment lines begin with #, blank lines are skipped
+
+https://help.github.com/articles/ignoring-files
+https://github.com/github/gitignore
+
+git config --global core.excludesfile <file_path>
+// This will pick  global config. for .gitignore from the file_path specified
+
+Note - Git will not ignore a file that was already tracked before a rule was added to the gitignore file.
+
+$ git rm --cached <file_name>
+//removes the file in the staging-index but still leaves the file in working copy and file-system
+// Now the changes to the file will not be tracked anymore, this will ignore already-tracked files
+
+Note - Git keeps track of files, not directories. The directories are just incidental as the path to get to those 
+files. If we want to keep track of a directory, it has to have a file in it, no matter how small, but there has to 
+be a file. People generally create .gitkeep file to track empty dirs.
+
+Referencing Commits --
+tree-ish means something that references part of the tree. In simple terms tree-ish is a reference to a commit 
+and that commit references the tree, the git repo.
+
+tree-ish, referencing commits
+- full SHA-1 hash
+- short SHA-1 hash
+	- at least 4 characters
+	- unambiguous (8-10 characters)
+- HEAD pointer
+- branch reference(references to the tip of the branch), tag reference
+- ancestry (we can refer to commits is by using any of the above methods and then referring to that object's ancestry)
+
+parent commit
+- HEAD^, acf87504^, master^
+- HEAD~1, HEAD~
+
+grandparent commit
+- HEAD^^, acf87504^^, master^^
+- HEAD~2
+
+great-grandparent commit
+- HEAD^^^, acf87504^^^, master^^^
+- HEAD~3
+
+$ git ls-tree <tree-ish>
+//Shows the list of file/folders in the git repo. w.r.t a particular commit
+Examples
+$ git ls-tree HEAD
+$ git ls-tree master (//same as above if current checked-out branch is master)
+$ git ls-tree master folder_name/
+//shows the content of the folder named folder_name
+
+Note - files are blob in git and directories are tree in git
+
+$ git ls-tree <Object_No. of the object(SHA1-HASH)>
+//lists the objects inside the tree object having SHA1-Hash equals Object_No.
+
+
+$ git log --oneline -<Num>
+//shows oneline description of the Num of commits
+
+$ git log --since="2012-06-20"
+$ git log --after="2012-06-20"
+//shows commits after the specified date
+
+$ git log --until="2012-06-20"
+$ git log --before="2012-06-20"
+//shows commits before the specified date
+
+$ git log --since="2 weeks ago" --until="3 days ago"
+$ git log --since=2.weeks --until=3.days
+
+$ git log --author="Kevin"
+//you can specify complete name or portion of name
+
+$ git log --grep="Msg"
+//lists the commits having Msg in their commit-text
+
+$ git log SHA1_Hash_Initial..SHA1_Hash_Final --oneline
+//shows the commits b/w the SHA1-Hashes specified
+
+$ git log -p
+//shows the diff what actually changed in all the commits
+
+$ git log -p SHA1_Hash.. <file>
+//shows in which commit the file get changed and the changes to the file.
+
+$ git log --stat --summary
+//gives you the idea of changes in the commits and the files involved in changes
+
+$ git log --format=<oneline/short/medium/full/fuller/email/raw>
+//shows commits in the different formats as specified
+
+$ git log --graph
+//shows graph of the commits
+
+$ git show <SHA1-Hash>
+//shows the complete detail/diff about a particular commit
+
+$ git show --format=oneline <tree-ish>
+//shows the oneline detail/diff about a particular commit
+
+$ git show <Object_SHA1_Hash>
+//shows what's inside file/directory.
+
+$ git diff <SHA1_Hash>
+//shows the difference b/w our working directory and the directory at the point in time that commit was made
+
+$ git diff <SHA1_Hash> <file_name>
+//shows the difference in file contents b/w our working directory and the directory at the point in time that commit was made
+
+$ git diff <tree-ish_one>..<tree-ish_two> <file_name>
+//shows the diff. b/w the commits specified by tree-ish, specify file_name if you want to see diff for a particular file.
+
+$ git diff --stat --summary <tree-ish_one>..<tree-ish_two>
+//show the stat and summary of the diff b/w the commits
+
+$ git diff -b <tree-ish_one>..<tree-ish_two>
+$ git diff --ignore-space-change <tree-ish_one>..<tree-ish_two>
+//ignores space-change in the diff
+
+$ git diff -w <tree-ish_one>..<tree-ish_two>
+$ git diff --ignore-all-space <tree-ish_one>..<tree-ish_two>
+//ignore all-spaces in the diff.
+
+Branches in Git -
+
+- In git branches are cheap
+ - try new ideas
+ - isolate features or sections of work
+- one working directory
+- fast context switching
+
+Note - To switch b/w branches your repo. working area should not have any tracked pending changes, else you won't be 
+able to switch branches.
+
+$ git diff <Branch1>..<Branch2>
+//Gives you the diff b/w tip of the Branch1 and tip of Branch2
+
+$ git branch --merged 
+//Show us all branches that are completely included in this branch i.e. branches which has all the commits included
+ in the current branch
+// comes in handy when we are going to delete branches
+
+$ git branch -m <Branch_Name> <New_Branch_Name>
+$ git branch --move <Branch_Name> <New_Branch_Name>
+//To rename a branch
+
+$ git branch -d <Branch_To_Delete>
+$ git branch --delete <Branch_To_Delete>
+// To delete a branch, it will not let you to delete branch if that branch is not fully merged to your current branch.
+
+//To merge changes checkout branch which is going to receive changes i.e. receiver branch
+//you checkout the receiving branch, then you say 'git merge' and then the target branch
+// Always run git merge with a clean working directory
+
+$ git merge --no-ff <branch_name>
+//Don't do a fast-forward merge, may be you want to put a commit message for your merge
+
+$ git merge --ff-only <branch_name>
+// Do merging if you can do a fast-forward merge else abort
+
+Resolving the merge conflicts 
+ - Abort Merge
+ - Resolve the conflicts manually
+ - Use a merge tool
+ 
+ $ git merge --abort
+ //To abort the merge, this will not merge anything and you will be safely out from the merge conflict situation.
+ 
+ $ git mergetool --tool=<tool_name>
+ // use mergetool command to merge using a merge tool
+ 
+ Strategies for reducing merge conflicts
+ - keep lines short
+ - keep commits small and focussed
+ - beware stray edits to whitespace
+   - spaces, tabs, line returns
+ - merge often
+ - track changes to master(keep bringing changes of master to your branch)
+ 
+ Stashing Changes --
+ //Stash changes don't have a SHA1 Hash associated with them
+ 
+ $ git stash save "Msg"
+ // To stash/save the changes made without doing a commit
+ // you can also include/stash untracked file using '-u|--include-untracked' option 
+ // stash can also be accessible if you switch branches
+ 
+ $ git stash list
+ //gives the list of stashed items
+ 
+ $ git stash show -p stash@{Stash_Num}
+ // To see what has changed in the particular stash
+ 
+ //Git will try to bring stashed changes to your working directory and apply those changes irrespective of the branch
+ //you are in.
+ 
+ $ git stash apply stash@{Stash_Num}
+ // it pulls changes from the stash into the working directory but leaves a copy in the stash
+ 
+ $ git stash pop stash@{Stash_Num}
+ // it pulls changes from the stash into the working directory but doesn't leaves any copy in the stash
+ // By default it will pop the first item
+ 
+ $ git stash drop stash@{Stash_Num}
+ // To delete an item from the stash
+ 
+ $ git stash clear
+ //Clears/Deletes all of the stashes
+ 
+ 
+ Remote Repositories or Remotes --
+ 
+ $ git remote add <alias> <url>
+ //to add a remote, generally you name <alias> to 'origin'
+ 
+ $ git remote rm <alias>
+ //to remove the remote, after this command you won't find this remote in your .git/config
+ 
+ $ git push -u <alias_of_remote> <branch_name>
+ //To push a particular branch to git
+ 
+ $ git branch 
+ //shows list of local repos.
+ 
+ $ git branch -r 
+ //shows list of remote repos.
+ 
+ $ git branch -a
+ //shows all the branches(local + remote)
+ 
+ $ git clone <clone_url> <local_dir_name>
+ //to clone a project
+ 
+ $ git clone -b <Branch_Name> <clone_url>
+ // To clone a particular branch
+ // Note - By default github will clone the master branch for you and remote refs of other branches.
+ 
+ 
+ To Clone All The Branches From GitHub
+ $ git clone --mirror <clone_url> .git
+ $ git config --bool core.bare false
+ $ git reset --hard
+ 
+ 
+ $ git branch --set-upstream <branch_name> origin/<branch_name>
+ // To set upstream tracking for a branch
+ 
+ $ git fetch <alias_name_for_remote_repo>  
+ // generally alias name is 'origin'
+ //fetch is what synchronizes origin/mater or cached-remote-branches with whatever is on the remote repo. 
+ // We just update origin/master or cached-remote-branches in fetch. master/non-remote-branches doesn't change at all.
+ 
+ Best Pratices -
+ - Fetch before you work
+ - Fetch before you push
+ - Fetch often
+ 
+ Merging in fetched changes -
+ // We shouldn't checkout origin/master i.e cached-remote-branch. if we do so we would go in "detached HEAD' state.
+ // We can always create another branch based on that 'origin/master' branch
+ $ git checkout -b my_master orgin/master
+ 
+ $ git merge origin/master 
+ // To merge from the cached remote branch
+ 
+ git pull = git fetch + git merge
+ 
+Note - Git never tries to do a merge during a push. So, you need to fetch and Merge before pushing your changes.
+
+$ git push origin :<Branch_Name_To_Delete>
+// To delete a remote branch from github
+// Push to origin, nothing, up to the branch 'Branch_Name_To_Delete'
+
+$ git push origin --delete <Branch_Name_To_Delete>
+// Alternative, To delete a remote branch from github
+ 
+ $ git log -p <Local_Branch_Name>..<Remote_Branch_Name>
+ // Gives the diff b/w the commits upto the tip of Remote_Branch_Name
+ 
+ Caching your GitHub password in Git On OSX
+ https://help.github.com/articles/caching-your-github-password-in-git/
+ 
+ Generating SSH Keys
+ https://help.github.com/articles/generating-an-ssh-key/
+ 
+ GitWeb(Git GUI) - You need to setup a webserver to host it
+ - https://git.wiki.kernel.org/index.php/Gitweb
+ 
+ Git GUI Tools List 
+ - https://git.wiki.kernel.org/index.php/InterfacesFrontendsAndTools
+ 
+ Git Self-Hosting - http://stackoverflow.com/questions/10888300/gitosis-vs-gitolite/10888536
+ Use Gitosis for Git Self Hosting
+ Gitosis        https://github.com/tv42/gitosis
+ Gitolite       http://gitolite.com/gitolite/index.html (Recommended)
+ 
+ To work with Markdown for creating GitHub README.md - https://daringfireball.net/projects/markdown/
+ 
+ Cheers!!!
+
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
